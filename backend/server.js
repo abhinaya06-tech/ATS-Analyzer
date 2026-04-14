@@ -32,9 +32,10 @@ app.post("/upload", upload.single("resume"), async (req, res) => {
 
     console.log("Resume length:", resumeText.length);
 
-    const stopWords = [
-  "and", "or", "the", "with", "a", "an", "to", "for", "in", "on",
-  "developer", "experience", "skills", "knowledge"
+   const stopWords = [
+  "and","or","the","with","a","an","to","for","in","on",
+  "looking","developer","experience","skills","knowledge",
+  "required","good","strong","ability","work","team"
 ];
 
 const jdWords = jd
@@ -42,8 +43,19 @@ const jdWords = jd
   .split(/\W+/)
   .filter(word => word.length > 2 && !stopWords.includes(word));
 
-const extractedSkills = [...new Set(jdWords)];
 
+const normalizeSkill = (skill) => {
+  const map = {
+    js: "javascript",
+    reactjs: "react",
+    nodejs: "node",
+    html5: "html",
+    css3: "css"
+  };
+
+  return map[skill] || skill;
+};
+const extractedSkills = [...new Set(jdWords.map(normalizeSkill))];
     let matched = [];
     let missing = [];
 
@@ -51,7 +63,13 @@ const extractedSkills = [...new Set(jdWords)];
     let total = extractedSkills.length;
 
     extractedSkills.forEach(skill => {
-      if (resumeText.includes(skill)) {
+     const normalizedSkill = normalizeSkill(skill);
+
+const isMatched =
+  resumeText.includes(normalizedSkill) ||
+  resumeText.includes(skill);
+
+if (isMatched) {
         matched.push(skill);
         score++;
       } else {
