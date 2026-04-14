@@ -7,7 +7,11 @@ const pdf = require("pdf-parse");
 const app = express();
 const upload = multer({ dest: "uploads/" });
 
-app.use(cors());
+// ✅ IMPORTANT for deployment (CORS safe)
+app.use(cors({
+  origin: "*"
+}));
+
 app.use(express.json());
 
 app.post("/upload", upload.single("resume"), async (req, res) => {
@@ -28,36 +32,38 @@ app.post("/upload", upload.single("resume"), async (req, res) => {
 
     console.log("Resume length:", resumeText.length);
 
-   const jdWords = jd.split(/\W+/);
+    const jdWords = jd.split(/\W+/);
 
-const commonSkills = [
-  "javascript", "react", "node", "html", "css",
-  "python", "java", "sql", "mongodb", "express"
-];
+    const commonSkills = [
+      "javascript", "react", "node", "html", "css",
+      "python", "java", "sql", "mongodb", "express"
+    ];
 
-const extractedSkills = jdWords.filter(word =>
-  commonSkills.includes(word)
-);
+    const extractedSkills = jdWords.filter(word =>
+      commonSkills.includes(word)
+    );
 
-   let matched = [];
-let missing = [];
+    let matched = [];
+    let missing = [];
 
-let score = 0;
-let total = extractedSkills.length;
+    let score = 0;
+    let total = extractedSkills.length;
 
-extractedSkills.forEach(skill => {
-  if (resumeText.includes(skill)) {
-    matched.push(skill);
-    score++;
-  } else {
-    missing.push(skill);
-  }
-});
+    extractedSkills.forEach(skill => {
+      if (resumeText.includes(skill)) {
+        matched.push(skill);
+        score++;
+      } else {
+        missing.push(skill);
+      }
+    });
 
-const finalScore = total === 0 ? 0 : Math.round((score / total) * 100);
-const suggestions = missing.map(
-  skill => `Add ${skill} to your resume`
-);
+    const finalScore = total === 0 ? 0 : Math.round((score / total) * 100);
+
+    const suggestions = missing.map(
+      skill => `Add ${skill} to your resume`
+    );
+
     console.log("Score:", finalScore);
 
     res.json({
@@ -74,6 +80,9 @@ const suggestions = missing.map(
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+// ✅ THIS IS THE FIX (VERY IMPORTANT)
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
