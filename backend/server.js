@@ -32,16 +32,17 @@ app.post("/upload", upload.single("resume"), async (req, res) => {
 
     console.log("Resume length:", resumeText.length);
 
-    const jdWords = jd.split(/\W+/);
+    const stopWords = [
+  "and", "or", "the", "with", "a", "an", "to", "for", "in", "on",
+  "developer", "experience", "skills", "knowledge"
+];
 
-    const commonSkills = [
-      "javascript", "react", "node", "html", "css",
-      "python", "java", "sql", "mongodb", "express"
-    ];
+const jdWords = jd
+  .toLowerCase()
+  .split(/\W+/)
+  .filter(word => word.length > 2 && !stopWords.includes(word));
 
-    const extractedSkills = jdWords.filter(word =>
-      commonSkills.includes(word)
-    );
+const extractedSkills = [...new Set(jdWords)];
 
     let matched = [];
     let missing = [];
