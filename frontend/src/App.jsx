@@ -19,7 +19,7 @@ function App() {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:5000/upload", formData);
+      const res = await axios.post("https://ats-backend-2ese.onrender.com/upload", formData);
       setResult(res.data);
     } catch (err) {
       console.error(err);
