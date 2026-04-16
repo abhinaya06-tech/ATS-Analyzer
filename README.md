@@ -1,16 +1,92 @@
-# React + Vite
+# AI-Powered ATS Resume Analyzer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Analyze resumes against job descriptions using weighted skill matching and get actionable feedback on skill gaps.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+* Upload resume (PDF)
+* Paste job description
+* Get ATS score (0–100%)
+* Skill matching (core, tools, basics)
+* Missing skills detection
+* Smart suggestions
+* Score breakdown by category
+* Visual progress bars
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🧠 How it Works
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Extract text from resume using pdf-parse
+2. Normalize skills using synonym mapping
+3. Match skills against predefined categories:
+
+   * Core Skills (React, Node, JS)
+   * Tools (AWS, Docker, Git)
+   * Basics (HTML, CSS)
+4. Apply weighted scoring:
+
+   * Core → High weight
+   * Tools → Medium
+   * Basics → Low
+5. Generate:
+
+   * Final score
+   * Skill breakdown
+   * Suggestions
+
+---
+
+## 📊 Example Output
+
+* Score: 65%
+* Matched Skills: React, JavaScript, HTML
+* Missing Skills: Node, AWS, Docker
+
+---
+
+## 🛠️ Tech Stack
+
+* Frontend: React (Vite)
+* Backend: Node.js + Express
+* File Upload: Multer
+* PDF Parsing: pdf-parse
+
+---
+
+## 📸 Screenshots
+
+### Input Screen
+
+![Input](screenshots/input.png)
+
+### Result Screen
+
+![Result](screenshots/result.png)
+
+---
+
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/abhinaya06-tech/ATS-Analyzer.git
+cd ATS-Analyzer
+```
+
+### Backend
+
+```bash
+cd backend
+npm install
+node server.js
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
